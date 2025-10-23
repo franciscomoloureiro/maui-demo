@@ -1,0 +1,74 @@
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:behaviors="clr-namespace:MAUI.Demo"
+             xmlns:mauiCursor="clr-namespace:MAUI.Demo"
+             xmlns:controls="clr-namespace:MAUI.Demo.Controls"
+             x:Name="this"
+             x:Class="MAUI.Demo.Controls.WatchlistWidget">
+    <Grid RowDefinitions="40,*,40" BackgroundColor="#4A4A4A" BindingContext="{x:Reference this}">
+        <Grid Grid.Row="0" HeightRequest="40">
+            <Label Text="{Binding Title}" FontSize="14" HorizontalOptions="Fill" VerticalOptions="Center" />
+            <Button Text="🗖" mauiCursor:CursorBehavior.Cursor="Hand" Clicked="OnDetachClicked" HorizontalOptions="End" x:Name="AttachButton" CornerRadius="0" />
+        </Grid>
+
+        <VerticalStackLayout HorizontalOptions="Fill" Grid.Row="1"
+                     VerticalOptions="Center" >
+            <Grid ColumnDefinitions="*,100,100"
+            RowSpacing="0"
+            ColumnSpacing="0">
+                <BoxView BackgroundColor="#3A3A3A" Grid.ColumnSpan="3" HeightRequest="1" VerticalOptions="Start" />
+                <BoxView BackgroundColor="#3A3A3A" WidthRequest="1" Grid.Column="0" HorizontalOptions="Start" />
+                <Label Text="Name" FontSize="12" FontAttributes="Bold" Padding="5" Grid.Column="0"/>
+                <BoxView BackgroundColor="#3A3A3A" WidthRequest="1" Grid.Column="1" HorizontalOptions="Start" />
+                <Label Text="Ask" FontSize="12" FontAttributes="Bold" Padding="5" Grid.Column="1" HorizontalOptions="Center" />
+                <BoxView BackgroundColor="#3A3A3A" WidthRequest="1" Grid.Column="1" HorizontalOptions="End" />
+                <Label Text="Bid" FontSize="12" FontAttributes="Bold" Padding="5" Grid.Column="2" HorizontalOptions="Center" />
+                <BoxView BackgroundColor="#3A3A3A" WidthRequest="1" Grid.Column="2" HorizontalOptions="End" />
+                <BoxView BackgroundColor="#3A3A3A" Grid.ColumnSpan="3" HeightRequest="1" VerticalOptions="End" />
+            </Grid>
+            <CollectionView
+                     SelectionMode="Single"
+                     SelectionChanged="OnSelectionChanged" HorizontalOptions="Start"
+                        VerticalScrollBarVisibility="Always"
+                    HorizontalScrollBarVisibility="Never"
+                    HeightRequest="100"
+                    x:Name="Watchlist" >
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid
+                      ColumnDefinitions="*,100,100"
+                      RowSpacing="0"
+                      ColumnSpacing="0">
+                            <BoxView BackgroundColor="#3A3A3A" WidthRequest="1" HorizontalOptions="Start" />
+                            <Label Grid.Column="0" Text="{Binding Name}" FontSize="12" Padding="5" />
+                            <BoxView BackgroundColor="#3A3A3A" WidthRequest="1" Grid.Column="1" HorizontalOptions="Start" />
+                            <controls:PriceLabel x:Name="AskLabel"
+                             Value="{Binding AskPrice}"
+                             FontSize="12"
+                             DecimalPlaces="2"
+                             Grid.Column="1"
+                             HorizontalOptions="Center"
+                             VerticalOptions="Center" />
+                            <BoxView BackgroundColor="#3A3A3A" WidthRequest="1" Grid.Column="1" HorizontalOptions="End" />
+                            <controls:PriceLabel x:Name="BidLabel"
+                             Value="{Binding BidPrice}"
+                             FontSize="12"
+                             DecimalPlaces="2"
+                             Grid.Column="2"
+                             HorizontalOptions="Center"
+                             VerticalOptions="Center" />
+                            <BoxView BackgroundColor="#3A3A3A" WidthRequest="1" Grid.Column="2" HorizontalOptions="End" />
+                            <BoxView BackgroundColor="#3A3A3A" Grid.ColumnSpan="3" HeightRequest="1" VerticalOptions="End" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+        <Grid Grid.Row="2" HeightRequest="40" ColumnDefinitions="*,*"
+                    RowSpacing="0"
+                    ColumnSpacing="0">
+            <Entry Grid.Column="0" FontSize="12" Placeholder="Enter symbol" x:Name="NewSymbolEntry" />
+            <Button Grid.Column="1" FontSize="12" Text="Add symbol" Clicked="OnAddPressed" CornerRadius="0"  mauiCursor:CursorBehavior.Cursor="Hand" />
+        </Grid>
+    </Grid>
+</ContentView>
