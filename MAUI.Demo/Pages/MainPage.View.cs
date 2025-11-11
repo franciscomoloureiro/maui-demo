@@ -1,4 +1,7 @@
 ﻿using MAUI.Demo.Controls;
+#if WINDOWS
+using MAUI.Demo.Platforms.Windows;
+#endif
 using Microsoft.Maui.Layouts;
 
 namespace MAUI.Demo.Pages;
@@ -25,7 +28,7 @@ public partial class MainPage : ContentPage
     {
         BackgroundColor = Colors.Gray,
     };
-
+    
     private WatchlistWidget _watchlist1;
     private WatchlistWidget _watchlist2;
     private WatchlistWidget _watchlist3;
@@ -37,6 +40,10 @@ public partial class MainPage : ContentPage
         
         AbsoluteLayout.SetLayoutBounds(_mainGrid, new Rect(0, 0, 1, 1));
         AbsoluteLayout.SetLayoutFlags(_mainGrid, AbsoluteLayoutFlags.All);
+#if WINDOWS
+
+        _splitter.SetCustomCursor(CursorIcon.Hand, Application.Current.Windows[0].Page.Handler.MauiContext);
+#endif
 
         _watchlist1 = new WatchlistWidget() { Title = "Watchlist" };
         var border = new Border()
@@ -61,19 +68,11 @@ public partial class MainPage : ContentPage
 
         _mainGrid.Add(_leftPane, 0, 0);
 
-        var label = new Label
-        {
-            Text = "...",
-            TextColor = Colors.White,
-            HorizontalOptions = LayoutOptions.Fill,
-            VerticalOptions = LayoutOptions.Fill,
-            HorizontalTextAlignment = TextAlignment.Center,
-            VerticalTextAlignment = TextAlignment.Center
-        };
+        
         _splitter.SetValue(CursorBehavior.CursorProperty, "Hand");
         _splitter.Behaviors.Add(new ResizeBehaviour());
 
-        _splitter.Children.Add(label);
+        
 
         _mainGrid.Add(_splitter, 1, 0);
 

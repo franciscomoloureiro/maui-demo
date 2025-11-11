@@ -25,10 +25,29 @@ public class ResizeBehaviour : Behavior<Grid>
         base.OnAttachedTo(bindable);
         _view = bindable;
         _splitterView = bindable;
+
+
+        var label = new Label
+        {
+            Text = "...",
+            TextColor = Colors.White,
+            BackgroundColor = Colors.OrangeRed,
+            HorizontalOptions = LayoutOptions.Fill,
+            VerticalOptions = LayoutOptions.Fill,
+            HorizontalTextAlignment = TextAlignment.Center,
+            VerticalTextAlignment = TextAlignment.Center,
+        };
         bindable.ParentChanged += OnParentChanged;
         var pan = new PanGestureRecognizer();
+        
+        
         pan.PanUpdated += OnPanUpdated;
+
         bindable.GestureRecognizers.Add(pan);
+        label.GestureRecognizers.Add(pan);
+
+        bindable.Children.Add(label);
+
     }
 
     static T? FindParentOfType<T>(Element element) where T : Element

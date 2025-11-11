@@ -47,7 +47,7 @@ public partial class WatchlistWidget : ContentView
 
     private void WatchlistWidget_Unloaded(object? sender, EventArgs e)
     {
-        _service.Dispose();
+        //_service.Dispose();
     }
 
     public void AddSymbols(string[] symbols)
@@ -71,6 +71,7 @@ public partial class WatchlistWidget : ContentView
                     Content = this
                 }
             };
+            newWindow.Destroying += NewWindow_Destroying;
             this.CurrentWindow = this.Window;
             Application.Current?.OpenWindow(newWindow);
 #if WINDOWS
@@ -84,10 +85,15 @@ public partial class WatchlistWidget : ContentView
 #endif
             Application.Current.CloseWindow(this.CurrentWindow);
             this.OriginalParent.Children.RemoveAt(this.index);
-
+            
             this.OriginalParent.Children.Insert(this.index, this);
             WindowState = WindowState.Attached;
         }
+    }
+
+    private void NewWindow_Destroying(object? sender, EventArgs e)
+    {
+        //_service.Dispose();
     }
 
     private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -122,5 +128,9 @@ public partial class WatchlistWidget : ContentView
                 });
             });
         }
+    }
+    public void Destroy()
+    {
+        _service.Dispose();
     }
 }

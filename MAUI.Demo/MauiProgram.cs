@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Maui.Handlers;
 
 namespace MAUI.Demo;
-
 public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
@@ -18,7 +18,7 @@ public static class MauiProgram
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
-
+        
 #if WINDOWS
         //Remove useless default animations
         //Cross platform solution needs to be worked on 
