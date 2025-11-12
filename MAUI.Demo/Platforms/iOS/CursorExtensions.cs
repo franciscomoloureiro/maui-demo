@@ -1,8 +1,7 @@
-﻿namespace MAUI.Demo.Platforms.iOS;
+﻿namespace MAUI.Demo;
 
 
 using CoreGraphics;
-using MAUI.Demo;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Shapes;
 using Microsoft.Maui.Platform;

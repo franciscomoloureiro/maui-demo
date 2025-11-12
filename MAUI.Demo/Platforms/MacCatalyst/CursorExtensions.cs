@@ -2,7 +2,7 @@
 using Microsoft.Maui.Platform;
 using UIKit;
 
-namespace MAUI.Demo.Platforms.MacCatalyst;
+namespace MAUI.Demo;
 
 public static class CursorExtensions
 {

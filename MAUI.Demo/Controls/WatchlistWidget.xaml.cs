@@ -1,7 +1,4 @@
 ﻿using MAUI.Demo.Models;
-#if WINDOWS
-using MAUI.Demo.Platforms.Windows;
-#endif
 using MAUI.Demo.Services;
 using System.Collections.ObjectModel;
 

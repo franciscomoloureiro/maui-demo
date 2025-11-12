@@ -1,7 +1,7 @@
 ﻿using Android.Views;
 using Microsoft.Maui.Platform;
 using Application = Android.App.Application;
-namespace MAUI.Demo.Platforms.Android;
+namespace MAUI.Demo;
 
 public static class CursorExtensions
 {

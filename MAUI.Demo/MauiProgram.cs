@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.Maui.Handlers;
+using MAUI.Demo.Controls;
 
 namespace MAUI.Demo;
 public static class MauiProgram
@@ -18,7 +18,7 @@ public static class MauiProgram
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
-        
+
 #if WINDOWS
         //Remove useless default animations
         //Cross platform solution needs to be worked on 
@@ -32,6 +32,13 @@ public static class MauiProgram
             {
                 System.Diagnostics.Debug.WriteLine($"RemoveWinUITransitions failed: {ex}");
             }
+        });
+#endif
+#if WINDOWS
+        // Register the custom handler for Windows only
+        builder.ConfigureMauiHandlers(handlers =>
+        {
+            handlers.AddHandler<SplitterControl, DragAndDropHandler>();
         });
 #endif
 

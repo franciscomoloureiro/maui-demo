@@ -5,7 +5,7 @@ using Microsoft.UI.Xaml.Input;
 using System.Reflection;
 using Windows.UI.Core;
 
-namespace MAUI.Demo.Platforms.Windows;
+namespace MAUI.Demo;
 
 //Platform specific code to change mouse cursor, we should do something similar for mouse clicks
 public static class CursorExtensions

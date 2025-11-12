@@ -1,7 +1,4 @@
-﻿#if WINDOWS
-using MAUI.Demo.Platforms.Windows;
-#endif
-
+﻿
 namespace MAUI.Demo;
 
 //original code: https://github.com/VladislavAntonyuk/MauiSamples/tree/main/MauiCursor
@@ -21,12 +18,10 @@ public class CursorBehavior
 
     private static void CursorChanged(BindableObject bindable, object oldvalue, object newvalue)
     {
-#if WINDOWS
         if (bindable is VisualElement visualElement)
         {
             visualElement.SetCustomCursor((CursorIcon)newvalue, Application.Current?.Windows[0].Page?.Handler?.MauiContext);
         }
-#endif
     }
 
     public static CursorIcon GetCursor(BindableObject view) => (CursorIcon)view.GetValue(CursorProperty);

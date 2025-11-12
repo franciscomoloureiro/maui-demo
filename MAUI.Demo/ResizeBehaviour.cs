@@ -1,5 +1,6 @@
-﻿
-using Microsoft.Maui.Layouts;
+﻿using Microsoft.Maui.Layouts;
+using MAUI.Demo.Controls;
+using System.Diagnostics;
 
 namespace MAUI.Demo;
 
@@ -16,9 +17,6 @@ public class ResizeBehaviour : Behavior<Grid>
     double _ghostX;
     double _dragStartX;
 
-    const double MinLeftWidth = 80;
-    const double MinRightWidth = 80;
-    
     const int SplitterWidth = 5;
     protected override void OnAttachedTo(Grid bindable)
     {
@@ -37,18 +35,48 @@ public class ResizeBehaviour : Behavior<Grid>
             HorizontalTextAlignment = TextAlignment.Center,
             VerticalTextAlignment = TextAlignment.Center,
         };
+        
         bindable.ParentChanged += OnParentChanged;
-        var pan = new PanGestureRecognizer();
-        
-        
-        pan.PanUpdated += OnPanUpdated;
 
+#if !WINDOWS
+        var pan = new PanGestureRecognizer();
+        pan.PanUpdated += OnPanUpdated;
         bindable.GestureRecognizers.Add(pan);
         label.GestureRecognizers.Add(pan);
-
+#endif
+        //There is a better way to do this, and probably some way to rewrite the pan gesture to be based on mouse clicks like below or else use the api below for all platforms
+#if WINDOWS
+    if (bindable is SplitterControl ddv)
+    {
+        ddv.Press += OnNativePress;
+        ddv.DragDelta += OnNativeDragDelta;
+        ddv.Release += OnNativeRelease;
+    }
+#endif
         bindable.Children.Add(label);
 
     }
+#if WINDOWS
+
+    private void OnNativePress(object? sender, (double dx, double dy) delta)
+    {
+        _ghost.IsVisible = true;
+    }
+
+    private void OnNativeDragDelta(object? sender, (double dx, double dy) delta)
+    {
+        var (dx, dy) = delta;
+        Console.WriteLine(delta);
+        AbsoluteLayout.SetLayoutBounds(_ghost, new Rect(_leftCol.Width.Value+dx, 0, _ghost.WidthRequest, 1));
+    }
+#endif
+
+    private void OnNativeRelease(object? sender, (double dx, double dy) delta)
+{
+    _ghost.IsVisible = false;
+    _leftCol.Width = new GridLength(_leftCol.Width.Value+delta.dx, GridUnitType.Absolute);
+    _rightCol.Width = new GridLength(1, GridUnitType.Star);
+}
 
     static T? FindParentOfType<T>(Element element) where T : Element
     {
@@ -82,22 +110,25 @@ public class ResizeBehaviour : Behavior<Grid>
         _grid = FindParentOfType<Grid>(_view);
         ArgumentNullException.ThrowIfNull(_grid);
 
+
+        _leftCol = _grid.ColumnDefinitions.ElementAtOrDefault(0);
+        _rightCol = _grid.ColumnDefinitions.ElementAtOrDefault(2);
+
+
         _ghost = new BoxView
         {
             BackgroundColor = Color.Parse("Red"),
             Opacity = 0.8,
             IsVisible = false,
             WidthRequest = SplitterWidth,
-            ZIndex = 9999
+            ZIndex = 9999,
         };
+
         AbsoluteLayout.SetLayoutFlags(_ghost, AbsoluteLayoutFlags.HeightProportional);
-        AbsoluteLayout.SetLayoutBounds(_ghost, new Rect(_ghostX, 0, SplitterWidth, 1)); // height = 100%
-        
+        AbsoluteLayout.SetLayoutBounds(_ghost, new Rect(_leftCol.Width.Value, 0, SplitterWidth, 1));
+
         _overlay = FindParentOfType<AbsoluteLayout>(_grid);
         _overlay.Children.Add(_ghost);
-
-        _leftCol = _grid.ColumnDefinitions.ElementAtOrDefault(0);
-        _rightCol = _grid.ColumnDefinitions.ElementAtOrDefault(2);
     }
 
     private void OnPanUpdated(object? sender, PanUpdatedEventArgs e)
